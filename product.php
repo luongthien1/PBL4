@@ -46,9 +46,9 @@ include "header.php";
     };
 })(window);
 </script>
-
+<img id="test"src="../../Test/PBL4/../../../cgi-bin/cgi.cgi">
 		<!-- SECTION -->
-		<div class="section main main-raised">
+		<div class="section main main-raised" style="margin-top: 20px">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -128,16 +128,6 @@ include "header.php";
 						<div class="product-details">
 							<h2 class="product-name">'.$row['product_title'].'</h2>
 							<div>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star-o"></i>
-								</div>
-								<a class="review-link" href="#review-form">10 Review(s) | Add your review</a>
-							</div>
-							<div>
 								<h3 class="product-price">$'.$row['product_price'].'</h3>
 								<span class="product-available">In Stock</span>
 							</div>
@@ -174,25 +164,6 @@ include "header.php";
 								
 							</div>
 
-							<ul class="product-btns">
-								<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-								<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
-							</ul>
-
-							<ul class="product-links">
-								<li>Category:</li>
-								<li><a href="#">Headphones</a></li>
-								<li><a href="#">Accessories</a></li>
-							</ul>
-
-							<ul class="product-links">
-								<li>Share:</li>
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i></a></li>
-							</ul>
-
 						</div>
 					</div>
 									
@@ -214,34 +185,62 @@ include "header.php";
 						<div id="product-tab">
 							<!-- product tab nav -->
 							<ul class="tab-nav">
-								<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-								<li><a data-toggle="tab" href="#tab2">Details</a></li>
-								
+								<li class="active"><a data-toggle="tab" href="#tab1">Comment</a></li>
 							</ul>
 							<!-- /product tab nav -->
 
 							<!-- product tab content -->
 							<div class="tab-content">
+								
 								<!-- tab1  -->
 								<div id="tab1" class="tab-pane fade in active">
 									<div class="row">
+
+										<!-- Reviews -->
 										<div class="col-md-12">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+											<div id="reviews" style="max-height: 300px; overflow-y: auto;">
+												<ul class="reviews">
+												' 
+									;
+									#$result = mysqli_query($con, $sql);
+									echo '<div id="get_comment">';
+
+									$sqls = "SELECT * FROM `comment` INNER JOIN user_info on comment.User_id = user_info.user_id WHERE comment.product_id = '$_GET[p]';";
+									$rss = mysqli_query($con,$sqls);
+									while ($rows = mysqli_fetch_array($rss)) {
+													echo '
+														<li>
+															<div class="review-heading">
+																<h5 class="name">'.$rows["first_name"].' '.$rows["last_name"].' :</h5>
+															</div>
+															<div class="review-body">
+																<p>'.$rows["Content"].'</p>
+															</div>
+														</li>';
+									}
+									
+									
+													 
+									echo '
+													</div>
+												</ul>
+											</div>';
+									if (isset($_SESSION['uid'])) {
+										echo '
+											<div>
+												<form class="review-form" id="comment-form" method="post">
+													<textarea class="input" name="comment" placeholder="Comment"></textarea>
+													<input type="hidden" name="p" value="'.$product_id.'">
+													<input class="review-btn" type="submit" value="Submit">
+												</form>';
+									}
+									echo'
+											</div>
 										</div>
+										<!-- /Reviews -->
 									</div>
 								</div>
 								<!-- /tab1  -->
-
-								<!-- tab2  -->
-								<div id="tab2" class="tab-pane fade in">
-									<div class="row">
-										<div class="col-md-12">
-											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-										</div>
-									</div>
-								</div>
-								<!-- /tab2  -->
-
 								
 							</div>
 							<!-- /product tab content  -->
@@ -262,77 +261,11 @@ include "header.php";
 				<!-- row -->
 				<div class="row">
                     
-					<div class="col-md-12">
-						<div class="section-title text-center">
-							<h3 class="title">Related Products</h3>
-							
-						</div>
-					</div>
                     ';
-									$_SESSION['product_id'] = $row['product_id'];
-									}
-								} 
-								?>	
-								<?php
-                    include 'db.php';
-								$product_id = $_GET['p'];
-                    
-					$product_query = "SELECT * FROM products,categories WHERE product_cat=cat_id AND product_id BETWEEN $product_id AND $product_id+3";
-                $run_query = mysqli_query($con,$product_query);
-                if(mysqli_num_rows($run_query) > 0){
-
-                    while($row = mysqli_fetch_array($run_query)){
-                        $pro_id    = $row['product_id'];
-                        $pro_cat   = $row['product_cat'];
-                        $pro_brand = $row['product_brand'];
-                        $pro_title = $row['product_title'];
-                        $pro_price = $row['product_price'];
-                        $pro_image = $row['product_image'];
-
-                        $cat_name = $row["cat_title"];
-
-                        echo "
-				
-                        
-                                <div class='col-md-3 col-xs-6'>
-								<a href='product.php?p=$pro_id'><div class='product'>
-									<div class='product-img'>
-										<img src='product_images/$pro_image' style='max-height: 170px;' alt=''>
-										<div class='product-label'>
-											<span class='sale'>-30%</span>
-											<span class='new'>NEW</span>
-										</div>
-									</div></a>
-									<div class='product-body'>
-										<p class='product-category'>$cat_name</p>
-										<h3 class='product-name header-cart-item-name'><a href='product.php?p=$pro_id'>$pro_title</a></h3>
-										<h4 class='product-price header-cart-item-info'>$pro_price</h4>
-										<div class='product-rating'>
-											<i class='fa fa-star'></i>
-											<i class='fa fa-star'></i>
-											<i class='fa fa-star'></i>
-											<i class='fa fa-star'></i>
-											<i class='fa fa-star'></i>
-										</div>
-										<div class='product-btns'>
-											<button class='add-to-wishlist'><i class='fa fa-heart-o'></i><span class='tooltipp'>add to wishlist</span></button>
-											<button class='add-to-compare'><i class='fa fa-exchange'></i><span class='tooltipp'>add to compare</span></button>
-											<button class='quick-view'><i class='fa fa-eye'></i><span class='tooltipp'>quick view</span></button>
-										</div>
-									</div>
-									<div class='add-to-cart'>
-										<button pid='$pro_id' id='product' class='add-to-cart-btn block2-btn-towishlist' href='#'><i class='fa fa-shopping-cart'></i> add to cart</button>
-									</div>
-								</div>
-                                </div>
-							
-                        
-			";
-		}
-        ;
-      
-}
-?>
+				$_SESSION['product_id'] = $row['product_id'];
+				}
+			} 
+			?>	
 					<!-- product -->
 					
 					<!-- /product -->

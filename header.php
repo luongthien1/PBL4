@@ -147,12 +147,12 @@ session_start();
 						<div class="col-md-6">
 							<div class="header-search">
 								<form>
-									<select class="input-select">
+									<!-- <select class="input-select">
 										<option value="0">All Categories</option>
 										<option value="1">Men</option>
 										<option value="1">Women </option>
-									</select>
-									<input class="input" id="search" type="text" placeholder="Search here">
+									</select> -->
+									<input class="input input-select" style="width: 350px; padding-left: 30px;" id="search" type="text" placeholder="Search here">
 									<button type="submit" id="search_btn" class="search-btn">Search</button>
 								</form>
 							</div>
@@ -172,26 +172,9 @@ session_start();
                                 
                                 echo '
                                <div class="dropdownn">
-                                  <a href="#" class="dropdownn" data-toggle="modal" data-target="#myModal" ><i class="fa fa-user-o"></i> HI '.$row["first_name"].'</a>
-                                  <div class="dropdownn-content" style="background-color: white">
-                                    <a href="" data-toggle="modal" data-target="#profile"><i class="fa fa-user-circle" aria-hidden="true" ></i>My Profile</a>
-                                    <a href="logout.php"><i class="fa fa-sign-in" aria-hidden="true"></i>Log out</a>
-                                    
-                                  </div>
+                                  <a href="Profile.php" ><i class="fa fa-user-o"></i> HI '.$row["first_name"].'</a>
                                 </div>';
 
-                            }else{ 
-                                echo '
-                                <div class="dropdownn">
-                                  <a href="#" class="dropdownn" data-toggle="modal" data-target="#myModal" ><i class="fa fa-user-o"></i> My Account</a>
-								  <div class="dropdownn-content" style="background-color: white">
-								  	<a href="admin/login.php" ><i class="fa fa-user" aria-hidden="true" ></i>Admin</a>
-                                    <a href="" data-toggle="modal" data-target="#Modal_login"><i class="fa fa-sign-in" aria-hidden="true" ></i>Login</a>
-                                    <a href="" data-toggle="modal" data-target="#Modal_register"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a>
-                                    
-                                  </div>
-                                </div>';
-                                
                             }
                                              ?>
 								<!-- /Wishlist -->
@@ -215,16 +198,44 @@ session_start();
 										</div>
 									</div>
 										
-									</div>
+								</div>
 								<!-- /Cart -->
+								<!-- Logout -->
+								<?php
+                             include "db.php";
+                            if(isset($_SESSION["uid"])){
+                                $sql = "SELECT first_name FROM user_info WHERE user_id='$_SESSION[uid]'";
+                                $query = mysqli_query($con,$sql);
+                                $row=mysqli_fetch_array($query);
+                                
+                                echo '
+                               <div>
+                                  <a href="logout.php"><i class="fa fa-sign-out"></i> Logout </a>
+                                  </div>
+                                </div>';
 
+                            }else{ 
+                                echo '
+                                <div class="dropdownn">
+                                  <a href="" class="dropdownn" data-toggle="modal" data-target="#Modal_login" ><i class="fa fa-sign-in"></i> Sign in</a>
+								  <div class="dropdownn-content" style="background-color: white; z-index: 10">
+								  	<a href="admin/login.php" ><i class="fa fa-user" aria-hidden="true" ></i>Admin</a>
+                                    <a href="" data-toggle="modal" data-target="#Modal_login"><i class="fa fa-sign-in" aria-hidden="true" ></i>Login</a>
+                                    <a href="" data-toggle="modal" data-target="#Modal_register"><i class="fa fa-user-plus" aria-hidden="true"></i>Register</a>
+                                    
+                                  </div>
+                                </div>';
+                                
+                            }
+                                             ?>
+								<!-- /Logout -->
 								<!-- Menu Toogle -->
-								<div class="menu-toggle">
+								<!-- <div class="menu-toggle">
 									<a href="#">
 										<i class="fa fa-bars"></i>
 										<span>Menu</span>
 									</a>
-								</div>
+								</div> -->
 								<!-- /Menu Toogle -->
 							</div>
 						</div>

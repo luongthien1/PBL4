@@ -24,7 +24,7 @@ $(document).ready(function(){
 			method:	"POST",
 			data	:	{categoryhome:1},
 			success	:	function(data){
-				$("#get_category_home").html(data);
+				//$("#get_category_home").html(data); Lấy thể loại cho thanh navigation
 				
 			}
 		})
@@ -193,7 +193,6 @@ $(document).ready(function(){
 	$("#signup_form").on("submit",function(event){
 		event.preventDefault();
 		$(".overlay").show();
-		console.log($("#signup_form").serialize());
 		$.ajax({
 			url : "register.php",
 			method : "POST",
@@ -410,6 +409,16 @@ $(document).ready(function(){
 			data	:	{getProduct:1,setPage:1,pageNumber:pn},
 			success	:	function(data){
 				$("#get_product").html(data);
+			}
+		})
+	})
+	$("#comment-form").on("submit", function(event) {
+		$.ajax({
+			url	:	"action.php",
+			method	:	"GET",
+			data	:	$("#comment-form").serialize(),
+			success	:	function(data){
+				$("#get_comment").html(data);
 			}
 		})
 	})

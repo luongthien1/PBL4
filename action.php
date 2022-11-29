@@ -150,7 +150,7 @@ if(isset($_POST["get_seleted_Category"]) || isset($_POST["selectBrand"]) || isse
         
 		$keyword = $_POST["keyword"];
 		$sql = "SELECT * FROM products inner join `categories` on products.product_cat = categories.cat_id
-		 WHERE product_cat=cat_id AND product_keywords LIKE ".'"%$keyword%"';
+		 WHERE product_cat=cat_id AND product_title LIKE "."'%$keyword%'";
 		echo "<div>Kết quả tìm kiếm cho từ khoá <b>'".$keyword."'</b> :".mysqli_num_rows(mysqli_query($con,$sql))."</div>";
 	}
 	
@@ -518,7 +518,24 @@ if (isset($_POST["updateCartItem"])) {
 	}
 }
 
-
+if (isset($_GET["comment"])) {
+	if (isset($_SESSION['uid'])) {
+	$sql = "INSERT INTO `comment` (`User_id`, `Product_id`, `Content`) VALUES ('$_SESSION[uid]','$_GET[p]','$_GET[comment]');";
+	$rs = mysqli_query($con,$sql);
+	$sql = "SELECT * FROM `comment` INNER JOIN user_info on comment.User_id = user_info.user_id WHERE comment.Product_id = '$_GET[p]'";
+	$rs = mysqli_query($con,$sql);
+	while ($row = mysqli_fetch_array($rs)) {
+		echo '<li>
+				<div class="review-heading">
+					<h5 class="name">'.$row["first_name"].' '.$row["last_name"].'</h5>
+				</div>
+				<div class="review-body">
+					<p>'.$row["Content"].'</p>
+				</div>
+			</li>';
+	}
+	}
+}
 
 
 ?>

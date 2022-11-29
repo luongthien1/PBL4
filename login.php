@@ -12,7 +12,7 @@ session_start();
 if(isset($_POST["email"]) && isset($_POST["password"])){
 	$email = mysqli_real_escape_string($con,$_POST["email"]);
 	$password = $_POST["password"];
-	$sql = "SELECT * FROM user_info WHERE email = '$email' AND password = '$password'";
+	$sql = "SELECT * FROM user_info WHERE email = '$email' AND password = '".md5($password)."'";
 	$run_query = mysqli_query($con,$sql);
 	$count = mysqli_num_rows($run_query);
     $row = mysqli_fetch_array($run_query);
